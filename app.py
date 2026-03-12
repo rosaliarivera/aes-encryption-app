@@ -21,12 +21,12 @@ def index():
         plaintext = request.form.get('plaintext', '')
 
         if not password:
-            flash('La clave no puede estar vacía.', 'error')
+            flash('The password cannot be empty.', 'error')
             return redirect(url_for('index'))
 
         if operation == 'encrypt':
             if not plaintext:
-                flash('Introduce texto para encriptar.', 'error')
+                flash('Please enter text to encrypt.', 'error')
                 return redirect(url_for('index'))
             payload = encrypt(plaintext, password, mode, key_bits)
             filename = secure_filename(f'cipher_{mode}_{key_bits}.txt')
@@ -45,13 +45,13 @@ def index():
             elif input_text:
                 payload = input_text
             else:
-                flash('Sube un fichero .txt con el ciphertext o pega el contenido.', 'error')
+                flash('Upload a ciphertext .txt file or paste the content.', 'error')
                 return redirect(url_for('index'))
             try:
                 plaintext = decrypt(payload, password)
                 result = plaintext
             except Exception as e:
-                flash(f'Error al desencriptar: {str(e)}', 'error')
+                flash(f'Decryption error: {str(e)}', 'error')
     return render_template('index.html', result=result)
 
 if __name__ == '__main__':

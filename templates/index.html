@@ -1,69 +1,72 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>AES Web App - Encriptar / Desencriptar</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <title>AES Encryption and Decryption</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="container">
-    <h1>AES: Encriptar y Desencriptar (ECB / CBC / CFB)</h1>
+<div class="container">
+    <h1>AES Encryption and Decryption (ECB / CBC / CFB)</h1>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="flashes">
-          {% for category, msg in messages %}
-            <div class="flash {{ category }}">{{ msg }}</div>
-          {% endfor %}
-        </div>
-      {% endif %}
+    {% if messages %}
+    <div class="flashes">
+        {% for category, msg in messages %}
+        <div class="flash {{ category }}">{{ msg }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
     {% endwith %}
 
     <form method="post" enctype="multipart/form-data">
-      <label>Operación:</label>
-      <label><input type="radio" name="operation" value="encrypt" checked> Encriptar</label>
-      <label><input type="radio" name="operation" value="decrypt"> Desencriptar</label>
 
-      <hr>
+        <label>Operation:</label>
+        <label><input type="radio" name="operation" value="encrypt" checked> Encrypt</label>
+        <label><input type="radio" name="operation" value="decrypt"> Decrypt</label>
 
-      <div id="encrypt-section">
-        <label>Texto plano (para encriptar):</label>
-        <textarea name="plaintext" rows="6" placeholder="Escribe el texto a encriptar..."></textarea>
-      </div>
+        <hr>
 
-      <div id="decrypt-section" style="display:none">
-        <label>Subir fichero .txt con ciphertext (o pega su contenido abajo):</label>
-        <input type="file" name="cipherfile" accept=".txt">
-        <label>O pega el contenido del .txt:</label>
-        <textarea name="ciphertextarea" rows="6" placeholder='Pega aquí el JSON guardado por la app'></textarea>
-      </div>
+        <div id="encrypt-section">
+            <label>Plaintext (text to encrypt):</label>
+            <textarea name="plaintext" rows="6" placeholder="Write the text you want to encrypt..."></textarea>
+        </div>
 
-      <label>Clave / Password:</label>
-      <input type="password" name="password" required>
+        <div id="decrypt-section" style="display:none">
+            <label>Upload ciphertext file (.txt) or paste its content:</label>
+            <input type="file" name="cipherfile" accept=".txt">
 
-      <label>Modo:</label>
-      <select name="mode">
-        <option>ECB</option>
-        <option>CBC</option>
-        <option>CFB</option>
-      </select>
+            <label>Or paste ciphertext here:</label>
+            <textarea name="ciphertextarea" rows="6" placeholder="Paste encrypted JSON text here"></textarea>
+        </div>
 
-      <label>Tamaño de clave:</label>
-      <select name="key_bits">
-        <option value="128">128 bits</option>
-        <option value="192">192 bits</option>
-        <option value="256">256 bits</option>
-      </select>
+        <label>Password / Secret Key:</label>
+        <input type="password" name="password" required>
 
-      <button type="submit">Ejecutar</button>
+        <label>AES Mode:</label>
+        <select name="mode">
+            <option>ECB</option>
+            <option>CBC</option>
+            <option>CFB</option>
+        </select>
+
+        <label>Key Length:</label>
+        <select name="key_bits">
+            <option value="128">128 bits</option>
+            <option value="192">192 bits</option>
+            <option value="256">256 bits</option>
+        </select>
+
+        <button type="submit">Execute</button>
     </form>
 
     {% if result %}
-      <h2>Texto desencriptado:</h2>
-      <pre>{{ result }}</pre>
+    <h2>Decrypted text:</h2>
+    <pre>{{ result }}</pre>
     {% endif %}
-  </div>
 
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
