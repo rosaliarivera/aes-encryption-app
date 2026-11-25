@@ -2,71 +2,167 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>AES Encryption and Decryption</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="An educational AES encryption and decryption web application.">
+    <title>CipherLab | AES Encryption Tool</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
-<div class="container">
-    <h1>AES Encryption and Decryption (ECB / CBC / CFB)</h1>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <div class="flashes">
-        {% for category, msg in messages %}
-        <div class="flash {{ category }}">{{ msg }}</div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    {% endwith %}
+<div class="page-wrapper">
 
-    <form method="post" enctype="multipart/form-data">
-
-        <label>Operation:</label>
-        <label><input type="radio" name="operation" value="encrypt" checked> Encrypt</label>
-        <label><input type="radio" name="operation" value="decrypt"> Decrypt</label>
-
-        <hr>
-
-        <div id="encrypt-section">
-            <label>Plaintext (text to encrypt):</label>
-            <textarea name="plaintext" rows="6" placeholder="Write the text you want to encrypt..."></textarea>
+    <header class="brand">
+        <div class="brand-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round"
+                 stroke-linejoin="round">
+                <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/>
+                <path d="m9 12 2 2 4-4"/>
+            </svg>
         </div>
 
-        <div id="decrypt-section" style="display:none">
-            <label>Upload ciphertext file (.txt) or paste its content:</label>
-            <input type="file" name="cipherfile" accept=".txt">
-
-            <label>Or paste ciphertext here:</label>
-            <textarea name="ciphertextarea" rows="6" placeholder="Paste encrypted JSON text here"></textarea>
+        <div class="brand-text">
+            <span class="brand-name">CipherLab</span>
+            <span class="brand-subtitle">AES ENCRYPTION TOOL</span>
         </div>
 
-        <label>Password / Secret Key:</label>
-        <input type="password" name="password" required>
+        <span class="badge">Academic project</span>
+    </header>
 
-        <label>AES Mode:</label>
-        <select name="mode">
-            <option>ECB</option>
-            <option>CBC</option>
-            <option>CFB</option>
-        </select>
+    <main class="container">
 
-        <label>Key Length:</label>
-        <select name="key_bits">
-            <option value="128">128 bits</option>
-            <option value="192">192 bits</option>
-            <option value="256">256 bits</option>
-        </select>
+        <div class="intro">
+            <h1>AES Encryption &amp; Decryption</h1>
+            <p>
+                Explore symmetric encryption using the
+                Advanced Encryption Standard.
+            </p>
+        </div>
 
-        <button type="submit">Execute</button>
-    </form>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flashes" role="status">
+            {% for category, msg in messages %}
+            <div class="flash {{ category }}">{{ msg }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
 
-    {% if result %}
-    <h2>Decrypted text:</h2>
-    <pre>{{ result }}</pre>
-    {% endif %}
+        <form method="post" enctype="multipart/form-data">
+
+            <fieldset class="operation-group">
+                <legend>Operation</legend>
+
+                <div class="operation-options">
+                    <label class="operation-option">
+                        <input type="radio" name="operation"
+                               value="encrypt"
+                               {% if not result %}checked{% endif %}>
+                        <span>Encrypt</span>
+                    </label>
+
+                    <label class="operation-option">
+                        <input type="radio" name="operation"
+                               value="decrypt"
+                               {% if result %}checked{% endif %}>
+                        <span>Decrypt</span>
+                    </label>
+                </div>
+            </fieldset>
+
+            <div id="encrypt-section" class="form-group">
+                <label for="plaintext">Plaintext</label>
+                <textarea id="plaintext"
+                          name="plaintext"
+                          rows="6"
+                          placeholder="Write the text you want to encrypt..."></textarea>
+            </div>
+
+            <div id="decrypt-section" style="display:none">
+
+                <div class="form-group">
+                    <label for="cipherfile">Upload encrypted file</label>
+                    <input type="file" id="cipherfile"
+                           name="cipherfile" accept=".txt">
+                    <small>Supported format: TXT</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="ciphertextarea">Or paste ciphertext</label>
+                    <textarea id="ciphertextarea"
+                              name="ciphertextarea"
+                              rows="6"
+                              placeholder="Paste encrypted JSON text here..."></textarea>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password / Secret Key</label>
+                <input type="password"
+                       id="password"
+                       name="password"
+                       placeholder="Enter your password"
+                       required>
+            </div>
+
+            <div class="form-row">
+
+                <div class="form-group">
+                    <label for="mode">AES Mode</label>
+                    <select id="mode" name="mode">
+                        <option value="ECB">ECB</option>
+                        <option value="CBC" selected>CBC</option>
+                        <option value="CFB">CFB</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="key_bits">Key Length</label>
+                    <select id="key_bits" name="key_bits">
+                        <option value="128">128 bits</option>
+                        <option value="192">192 bits</option>
+                        <option value="256" selected>256 bits</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button type="submit" class="execute-button">
+                Execute operation
+            </button>
+
+        </form>
+
+        {% if result %}
+        <section class="result" aria-live="polite">
+            <div class="result-heading">
+                <span class="result-dot"></span>
+                <h2>Decrypted text</h2>
+            </div>
+            <pre>{{ result }}</pre>
+        </section>
+        {% endif %}
+
+        <div class="security-note">
+            <strong>Educational use only.</strong>
+            This application demonstrates AES encryption
+            concepts and is not intended for production use.
+        </div>
+
+    </main>
+
+    <footer>
+        <p>Developed by Rosalía Rivera Mosquera</p>
+        <p>University of Vigo · Academic Project</p>
+    </footer>
 
 </div>
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
+
 </body>
 </html>
