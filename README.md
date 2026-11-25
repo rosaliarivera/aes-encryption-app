@@ -1,5 +1,6 @@
 # AES Encryption & Decryption Web App
 
+![Python Tests](https://github.com/rosaliarivera/aes-encryption-app/actions/workflows/tests.yml/badge.svg)
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-000000?style=flat-square&logo=flask&logoColor=white)
 ![Cryptography](https://img.shields.io/badge/Cryptography-AES-blue?style=flat-square)
