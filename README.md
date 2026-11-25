@@ -21,6 +21,26 @@ This project was developed as part of my academic studies at the University of V
 - Decrypt content by uploading a file or pasting encrypted text.
 - Web-based user interface.
 
+## Application Demo
+
+### User Interface
+
+![Application Interface](screenshots/interface.png)
+
+### Encryption Example
+
+Text encryption configuration using CBC mode and a 256-bit key.
+
+![Encryption Example](screenshots/encryption.png)
+
+### Decryption Result
+
+Successful recovery of the original plaintext.
+
+![Decryption Result](screenshots/decryption.png)
+
+
+
 ## Technologies
 
 | Technology | Purpose |
