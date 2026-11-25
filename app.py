@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, send_file, redirect, url_for, flash
 import os
 from utils.crypto_utils import encrypt, decrypt
@@ -5,7 +6,7 @@ from werkzeug.utils import secure_filename
 import io
 
 app = Flask(__name__)
-app.secret_key = 'cambia_esto_por_una_clave_secreta_en_el_repo'
+app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(32)
 
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -55,4 +56,4 @@ def index():
     return render_template('index.html', result=result)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
